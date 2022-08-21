@@ -9,17 +9,15 @@ def auth_required(func):
         token = request.headers.environ.get('HTTP_AUTHORIZATION').replace('Bearer ', '')
 
         if not token:
-            raise "Not token"
+            return "Not token"
 
         try:
             jwt.decode(token,
                        key=current_app.config['SECRET_HERE'],
                        algorithms=current_app.config['ALGORITHM'])
             return func(*args, **kwargs)
-
-
         except Exception:
-            raise Exception
+            return "Token not decode"
 
     return wrapper
 
